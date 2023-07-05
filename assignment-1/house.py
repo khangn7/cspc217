@@ -69,14 +69,14 @@ def drawHouse(x, y, is_flying:bool):
 
    # roof
    setColor("red")
-   polygon(corner_x, corner_y, corner_x + wall_wh, corner_y, corner_x + wall_half, corner_y - wall_half)
+   polygon(corner_x, corner_y, corner_x + wall_wh, corner_y, corner_x + wall_half, corner_y - wall_half*0.5)
 
    # window
    window_d = wall_half*0.6 # diameter
    # upper left corner coords
    window_xy = [corner_x + wall_half*1.3, corner_y + wall_half*0.4]
 
-   setColor("lightgray")
+   setColor("yellow")
    ellipse(window_xy[0], window_xy[1], window_d, window_d)
    setColor("black")
    line(window_xy[0] + window_d/2, window_xy[1], window_xy[0] + window_d/2, window_xy[1] + window_d)
