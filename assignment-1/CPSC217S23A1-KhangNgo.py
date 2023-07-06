@@ -5,26 +5,26 @@ CANVAS_HEIGHT = 600
 resize(CANVAS_WIDTH, CANVAS_HEIGHT)
 
 def main():
-   drawBackground()
-
-   print("where should the sun be? (integer)")
-   drawSun(get_int("sun x-coord: "), get_int("sun y_coord: "))
-   
-   print("where should your house be? (integer)")
-   house_y = get_int("house y-coord: ")
-   drawHouse(get_int("house x-coord: "), house_y, house_y + 20 < CANVAS_HEIGHT/2) # want a gap of 20 
-
-# draw everything except sun and house
-def drawBackground():
-
+   # sky
    background("skyblue")
 
+   # grass
    setColor("green")
    rect(0, CANVAS_WIDTH/2, CANVAS_WIDTH, CANVAS_HEIGHT/2)
 
+   # sun
+   print("where should the sun be? (integer)")
+   drawSun(get_int("sun x-coord: "), get_int("sun y_coord: "))
+
+   # clouds
    drawClouds(600, 200)
    drawClouds(400, 50)
    drawClouds(100, 200)
+   
+   # house
+   print("where should your house be? (integer)")
+   house_y = get_int("house y-coord: ")
+   drawHouse(get_int("house x-coord: "), house_y, house_y + 20 < CANVAS_HEIGHT/2) # want a gap of 20 
 
 # draw scuffed clouds given upper left corner coords
 def drawClouds(left_x, up_y):
