@@ -24,8 +24,9 @@ def drawBackground():
 
    drawClouds(600, 200)
    drawClouds(400, 50)
+   drawClouds(100, 200)
 
-# draw scuffed clouds, inputs are coords for upper left corner
+# draw scuffed clouds given upper left corner coords
 def drawClouds(left_x, up_y):
 
    cloud_w = 50
