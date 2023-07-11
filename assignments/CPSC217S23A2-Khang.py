@@ -33,6 +33,8 @@ while cond:
 
 print(show_axis)
 
+show_axis = show_axis == "Y"
+
 # Set up the window to draw in
 resize(inp_size + 50, inp_size + 50)
 background("black")
@@ -95,7 +97,16 @@ for key in nesw:
     text(nesw[key][0], nesw[key][1], key)
 
 
-star_count = 1
+COLORS = ["red", "yellow", "green", "blue", "violet", "pink"]
+color_count = len(COLORS)
+
+# given x or y as float from -1 to 1 
+# return corresponding coords on canvas
+def getRealCoords(coord, is_x:bool): # if it's for x coord is_x is true, for y is false
+    is_x = 1 if is_x else -1
+    return 25 + (1 + is_x*coord)*half_size
+
+constellation_on = 0
 while True:
 
     # Get constellation star count
@@ -105,42 +116,42 @@ while True:
         break
 
 
-    # get first star
+    # get and draw stars
 
-    star_mag = float(input("give star magnitude: \n"))
-    star_size = 13 / (star_mag + 2.5)
-    star_color = (1 - ((star_mag + 1.5) / 12)) * 255
+    for i in range(star_count):
+        star_mag = float(input("give star magnitude: \n"))
+        star_size = 13 / (star_mag + 2.5)
+        star_color = (1 - ((star_mag + 1.5) / 12)) * 255
 
-    starxy = [
-        # final coords, all math here
-        25 + (1 + float(input("give star x coord: \n")))*half_size - star_size/2, 
-        25 + (1 + float(input("give star y coord: \n")))*half_size - star_size/2
-    ]
+        starxy = [
+            # final coords, all math done here
+            getRealCoords(float(input("give star x coord: \n")), True) - star_size/2, 
+            getRealCoords(float(input("give star y coord: \n")), False) - star_size/2
+        ]
 
-    setColor(star_color, star_color, star_color)
-    ellipse(starxy[0], starxy[1], star_size, star_size)
+        setColor(star_color, star_color, star_color)
+        ellipse(starxy[0], starxy[1], star_size, star_size)
 
 
-    # get number of edges
+    # get and draw number of edges
 
+    setColor(COLORS[constellation_on % color_count])
+
+    edge_count = int(input("enter how many edges to plot for constellation (<= 0 to move to next):\n"))
+
+    for i in range(edge_count):
+        edge_xy = ["start x", "start y", "end x", "end y"]
+        for t in range(4):
+            edge_xy[t] = float(input(f"enter edge {edge_xy[t]} coord: "))
+            # all math for coords here
+            edge_xy[t] = getRealCoords(edge_xy[t], t % 2 == 0)
+
+        line(edge_xy[0], edge_xy[1], edge_xy[2], edge_xy[3])
+
+    constellation_on += 1
 
     
 
 print("done drawing constellations")
 
-# Continue to make constellations until given 0 or a negative number of star count
 
-    # Loop to get input for each star (magnitude, followed by x and then y coordinates)
-        # Do conversions for drawing
-        # Draw star
-
-    # Get number of edges to draw
-
-    # Loop to get input for each edge two (x, y) coordinates
-        # Do conversions for drawing
-        # Set color for edges of constellation (cycles 6 colours)
-        # Draw edge
-
-    # Get next constellation star count
-
-# Done
