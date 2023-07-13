@@ -6,6 +6,10 @@
 
 #INFORMATION FOR YOUR TA
 
+# student: Khang Ngo
+# constellations assignment
+# the normal assignment not the bonus one
+
 from SimpleGraphics import *
 
 # STYLE CONSTANTS
@@ -56,12 +60,13 @@ if show_axis:
     line(25 + half_size, 25, 25 + half_size, 25 + inp_size)
 
     # Draw and label x-axis ticks
-    tick_length = 5
+
+    tick_length = 5 # actually is half the length
 
     tick_interval = inp_size/20
     tick_start = 25
 
-    # for center
+    # for center of tick
     tick_x = tick_start
     tick_y = 25 + half_size
 
@@ -106,7 +111,7 @@ def getRealCoords(coord, is_x:bool): # if it's for x coord is_x is true, for y i
     is_x = 1 if is_x else -1
     return 25 + (1 + is_x*coord)*half_size
 
-color_on = 0
+color_on = 0 # used to index COLORS[]
 while True:
 
     # Get constellation star count
