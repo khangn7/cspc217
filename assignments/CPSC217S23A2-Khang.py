@@ -106,7 +106,7 @@ def getRealCoords(coord, is_x:bool): # if it's for x coord is_x is true, for y i
     is_x = 1 if is_x else -1
     return 25 + (1 + is_x*coord)*half_size
 
-constellation_on = 0
+color_on = 0
 while True:
 
     # Get constellation star count
@@ -135,7 +135,7 @@ while True:
 
     # get and draw number of edges
 
-    setColor(COLORS[constellation_on % color_count])
+    setColor(COLORS[color_on])
 
     edge_count = int(input("enter how many edges to plot for constellation (<= 0 to move to next):\n"))
 
@@ -148,7 +148,8 @@ while True:
 
         line(edge_xy[0], edge_xy[1], edge_xy[2], edge_xy[3])
 
-    constellation_on += 1
+    color_on += 1
+    color_on = color_on % color_count
 
     
 
