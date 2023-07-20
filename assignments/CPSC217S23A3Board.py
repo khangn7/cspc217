@@ -17,7 +17,6 @@ O_PIECE = 2
 
 DEFAULT_ROW = 3
 DEFAULT_COL = 3
-
 WIN_LENGTH = 3
 
 #
@@ -43,7 +42,6 @@ def create_board(rows=DEFAULT_ROW, columns=DEFAULT_COL) -> list:
 def row_count(board) -> int:
     """
     returns the amount of rows in a 2d list returned by create_board()
-
     :param board: list, the 2d list representing the tictactoe board
     :return: int, amount of rows
     """
@@ -55,7 +53,6 @@ def row_count(board) -> int:
 def column_count(board) -> int:
     """
     returns the amount of columns in a 2d list returned by create_board()
-
     :param board: list, the 2d list representing the tictactoe board
     :return: int, amount of columns
     """
@@ -67,7 +64,6 @@ def column_count(board) -> int:
 def can_play(board, row, column) -> bool:
     """
     returns whether there is board[row][column] has the value EMPTY constant
-
     :param board: list, 2d list representing board
     :param row: row the box chosen to check is in
     :param column: column the box is in
@@ -81,7 +77,6 @@ def can_play(board, row, column) -> bool:
 def play(board, row, column, piece):
     """
     changes board[row][column] to piece
-
     :param board: list, 2d list representing board
     :param row: row the box chosen to check is in
     :param column: column the box is in
@@ -97,7 +92,6 @@ def play(board, row, column, piece):
 def full(board) -> bool:
     """
     returns whether board[][] has no values that are EMPTY constant
-
     :param board: list, 2d list representing board
     :return: bool, described above
     """
@@ -114,9 +108,7 @@ def full(board) -> bool:
 def win_in_row(board, row, piece) -> bool:
     """
     returns whether given piece won in given row
-
     check if there is the given piece in a row of WIN_LENGTH in given row
-
     :param board: list, 2d list representing board
     :param row: row the box chosen to check is in
     :param piece: int, should be constant representing player's piece
@@ -125,18 +117,13 @@ def win_in_row(board, row, piece) -> bool:
     in_a_row = 0
     # each box in row
     for box in board[row]:
-
         if box == piece:
-            # record how many in a row so far
-            in_a_row += 1
+            in_a_row += 1 # record how many in a row so far
         else:
-            # reset 
-            in_a_row = 0
-
+            in_a_row = 0 # reset 
         # if ever enough to win
         if in_a_row == WIN_LENGTH:
             return True
-    
     return False
 
 #
@@ -145,9 +132,7 @@ def win_in_row(board, row, piece) -> bool:
 def win_in_column(board, column, piece) -> bool:
     """
     returns whether given piece won in given column
-
     check if there is the given piece in a continuous sequence of WIN_LENGTH in given column
-
     :param board: list, 2d list representing board
     :param column: column the box chosen to check is in
     :param piece: int, should be constant representing player's piece
@@ -165,7 +150,6 @@ def win_in_column(board, column, piece) -> bool:
             in_a_row = 0
         if in_a_row == WIN_LENGTH:
             return True
-
     return False
 
 #
@@ -174,21 +158,16 @@ def win_in_column(board, column, piece) -> bool:
 def win_in_diagonal_backslash(board, piece):
     """
     returns whether given piece won due to a "backslash" diagonal 
-
     backslash diagonal is sequence where every piece's row and column is 1 higher than previous piece
     function checks if any diagonal of WIN_LENGTH exists where every piece is given piece
-
     :param board: list, 2d list representing board
     :param piece: int, should be constant representing player's piece
     :return: bool, True if given piece wins, else False
     """
-
     ro_count = row_count(board)
     col_count = column_count(board)
-
     # range(ro_count - WIN_LENGTH + 1) and range(ro_count - WIN_LENGTH + 1) 
     # is so no indexing out of range
-
     # iterate all possible staring coords for diagonal
     for start_x in range(col_count - WIN_LENGTH + 1): 
         for start_y in range(ro_count - WIN_LENGTH + 1):
@@ -203,13 +182,10 @@ def win_in_diagonal_backslash(board, piece):
                     in_a_row = 0
                 if in_a_row == WIN_LENGTH:
                     return True
-
                 # change to index next box
                 box_x += 1
                 box_y += 1
-
     return False
-
 
 
 #
@@ -218,10 +194,8 @@ def win_in_diagonal_backslash(board, piece):
 def win_in_diagonal_forward_slash(board, piece):
     """
     returns whether given piece won due to a "forward slash" diagonal 
-
     forward slash diagonal is sequence where every piece's row is 1 lower and column is 1 higher than previous piece
     function checks if any diagonal of WIN_LENGTH exists where every piece is given piece
-
     :param board: list, 2d list representing board
     :param piece: int, should be constant representing player's piece
     :return: bool, True if given piece wins, else False
@@ -232,7 +206,6 @@ def win_in_diagonal_forward_slash(board, piece):
     # checks from left to right
     for start_x in range(col_count - WIN_LENGTH + 1):
         for start_y in range(ro_count - 1, WIN_LENGTH - 2, -1):
-
             # start_x and start_y here will be for the leftmost lowest box of diagonal
             in_a_row = 0
             box_x = start_x
@@ -245,10 +218,8 @@ def win_in_diagonal_forward_slash(board, piece):
                     in_a_row = 0
                 if in_a_row == WIN_LENGTH:
                     return True
-
                 box_x += 1
                 box_y -= 1
-
     return False
 
 
@@ -258,7 +229,6 @@ def win_in_diagonal_forward_slash(board, piece):
 def won(board, piece) -> bool:
     """
     returns whether given piece has won in the board using WIN_LENGTH
-
     :param board: list, 2d list representing board
     :param piece: int, should be constant representing player's piece
     :return: bool, True if given piece wins, else False
@@ -278,7 +248,6 @@ def won(board, piece) -> bool:
         return True
     if win_in_diagonal_forward_slash(board, piece):
         return True
-
     return False
 
 
@@ -287,51 +256,32 @@ def won(board, piece) -> bool:
 #
 def hint(board, piece):
     """
-    returns row and column of of move to win given a board where the given piece
-    is one move away from winning
-
+    returns row and column of of move to win given a board, if there is no such move returns (-1, -1)
     :param board: list, 2d list representing board
     :param piece: int, should be constant representing player's piece
-    :return: tuple, row and column of the move, used to index the board
+    :return: tuple, described above
     """
     ro_count = row_count(board)
     col_count = column_count(board)
-
     # check horizontally
     for start_y in range(ro_count):
         for start_x in range(col_count - WIN_LENGTH + 1):
-            empty = [0, 0] # y,x coords for empty square 
-            pieces_found = 0
-            check_x = start_x
-            for i in range(WIN_LENGTH):
-                if board[start_y][check_x] == piece:
-                    pieces_found += 1
-                else:
-                    empty[0] = start_y
-                    empty[1] = check_x
-                check_x += 1
-            # if just one more move needed to win
-            if pieces_found == (WIN_LENGTH - 1):
-                return (empty[0], empty[1])
-    
+            first_y = start_y
+            first_x = start_x
+            win_coords = checkSequenceNearWin(board, piece, first_y, first_x, 0, 1)
+            if win_coords[0] != -1:
+                return win_coords
     # check vertically
     for start_x in range(col_count):
         for start_y in range(ro_count - WIN_LENGTH + 1):
-            empty = [0, 0]
-            pieces_found = 0
-            check_y = start_y
-            for i in range(WIN_LENGTH):
-                if board[check_y][start_x] == piece:
-                    pieces_found += 1
-                else:
-                    empty[0] = check_y
-                    empty[1] = start_x
-                check_y += 1
-            if pieces_found == (WIN_LENGTH - 1):
-                return (empty[0], empty[1])
+            first_y = start_y
+            first_x = start_x
+            win_coords = checkSequenceNearWin(board, piece, first_y, first_x, 1, 0)
+            if win_coords[0] != -1:
+                return win_coords
     
     # note: 
-    # below both types of diagonals can be checked at the same time
+    # both types of diagonals can be checked at the same time
     # because each diagonal has an opposite diagonal
     # think of checking as convoluting WIN_LENGTH * WIN_LENGTH grid over board
     # in that grid is two WIN_LENGTH diagonals
@@ -339,40 +289,48 @@ def hint(board, piece):
     # check all diagonals
     for start_x in range(col_count - WIN_LENGTH + 1): 
         for start_y in range(ro_count - WIN_LENGTH + 1):
+            # check backwards slash
+            first_y = start_y
+            first_x = start_x
+            win_coords = checkSequenceNearWin(board, piece, first_y, first_x, 1, 1)
+            if win_coords[0] != -1:
+                return win_coords
+            # check forward slash
+            first_y = start_y + WIN_LENGTH - 1
+            first_x = start_x
+            win_coords = checkSequenceNearWin(board, piece, first_y, first_x, -1, 1)
+            if win_coords[0] != -1:
+                return win_coords
 
-            # backwards slash
-            check_x = start_x
-            check_y = start_y
-            pieces_found = 0
-            empty = [0, 0]
-            for i in range(WIN_LENGTH):
-                if board[check_y][check_x] == piece:
-                    pieces_found += 1
-                else:
-                    empty[0] = check_y
-                    empty[1] = check_x
-                check_y += 1
-                check_x += 1
-            if pieces_found == (WIN_LENGTH - 1):
-                return (empty[0], empty[1])
+    return (-1, -1)
             
-            # forward slash
-            check_x = start_x
-            check_y = start_y + WIN_LENGTH - 1
-            pieces_found = 0
-            for i in range(WIN_LENGTH):
-                if board[check_y][check_x] == piece:
-                    pieces_found += 1
-                else:
-                    empty[0] = check_y
-                    empty[1] = check_x
-                check_x += 1
-                check_y -= 1
-            if pieces_found == (WIN_LENGTH - 1):
-                return (empty[0], empty[1]) 
-            
-            
+def checkSequenceNearWin(board, piece, start_y:int, start_x:int, change_y:int, change_x:int) -> tuple:
+    """
+    give starting coords for a sequence defined by change_yx param, return coords needed to win
+    if no win returns (-1, -1)
+    :param start_y: int, row of first cell in sequence
+    :param start_x: int, column of first cell in sequence
+    :param change_y: described below
+    :param change x: int, the difference in the coords between next cell and current cell in sequence
+                     aka. change in coords per cell in sequence from left to right
+    :return: tuple, described above in format (row, column)
+    """
+    check_y = start_y
+    check_x = start_x
+    pieces_found = 0
+    empty = [0, 0]
+    for i in range(WIN_LENGTH):
+        if board[check_y][check_x] == piece:
+            pieces_found += 1
+        else:
+            empty[0] = check_y
+            empty[1] = check_x
+        check_y += change_y
+        check_x += change_x
+    if pieces_found == (WIN_LENGTH - 1):
+        return (empty[0], empty[1])
 
+    return (-1, -1)
 
 
 
@@ -396,8 +354,7 @@ def game_over(board):
 if __name__ == '__main__':
     print("File is being run directly so ask about running the tests.")
 
-    # if input("Enter Y to run tests:") == "Y":
-    from CPSC217S23A3Test import *
+    if input("Enter Y to run tests:") == "Y":
+        from CPSC217S23A3Test import *
 
     run_tests()
-
