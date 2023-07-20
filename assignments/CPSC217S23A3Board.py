@@ -8,6 +8,7 @@
 '''
 Name: Khang Ngo
 UCID: 30237573
+assignment regular version
 '''
 
 # Constants for the game pieces
@@ -261,77 +262,23 @@ def hint(board, piece):
     :param piece: int, should be constant representing player's piece
     :return: tuple, described above
     """
-    ro_count = row_count(board)
-    col_count = column_count(board)
-    # check horizontally
-    for start_y in range(ro_count):
-        for start_x in range(col_count - WIN_LENGTH + 1):
-            first_y = start_y
-            first_x = start_x
-            win_coords = checkSequenceNearWin(board, piece, first_y, first_x, 0, 1)
-            if win_coords[0] != -1:
-                return win_coords
-    # check vertically
-    for start_x in range(col_count):
-        for start_y in range(ro_count - WIN_LENGTH + 1):
-            first_y = start_y
-            first_x = start_x
-            win_coords = checkSequenceNearWin(board, piece, first_y, first_x, 1, 0)
-            if win_coords[0] != -1:
-                return win_coords
-    
-    # note: 
-    # both types of diagonals can be checked at the same time
-    # because each diagonal has an opposite diagonal
-    # think of checking as convoluting WIN_LENGTH * WIN_LENGTH grid over board
-    # in that grid is two WIN_LENGTH diagonals
-
-    # check all diagonals
-    for start_x in range(col_count - WIN_LENGTH + 1): 
-        for start_y in range(ro_count - WIN_LENGTH + 1):
-            # check backwards slash
-            first_y = start_y
-            first_x = start_x
-            win_coords = checkSequenceNearWin(board, piece, first_y, first_x, 1, 1)
-            if win_coords[0] != -1:
-                return win_coords
-            # check forward slash
-            first_y = start_y + WIN_LENGTH - 1
-            first_x = start_x
-            win_coords = checkSequenceNearWin(board, piece, first_y, first_x, -1, 1)
-            if win_coords[0] != -1:
-                return win_coords
+    for row in range(row_count(board)):
+        for col in range(column_count(board)):
+            # if not open cell
+            if board[row][col] != EMPTY:
+                continue
+            # set test move
+            play(board, row, col, piece) 
+            # see if move won
+            win_cond = win_in_column(board, col, piece) or win_in_row(board, row, piece)
+            win_cond = win_cond or win_in_diagonal_forward_slash(board, piece)
+            win_cond = win_cond or win_in_diagonal_backslash(board, piece)
+            if win_cond:
+                return (row, col)
+            # undo move
+            play(board, row, col, EMPTY)
 
     return (-1, -1)
-            
-def checkSequenceNearWin(board, piece, start_y:int, start_x:int, change_y:int, change_x:int) -> tuple:
-    """
-    give starting coords for a sequence defined by change_yx param, return coords needed to win
-    if no win returns (-1, -1)
-    :param start_y: int, row of first cell in sequence
-    :param start_x: int, column of first cell in sequence
-    :param change_y: described below
-    :param change x: int, the difference in the coords between next cell and current cell in sequence
-                     aka. change in coords per cell in sequence from left to right
-    :return: tuple, described above in format (row, column)
-    """
-    check_y = start_y
-    check_x = start_x
-    pieces_found = 0
-    empty = [0, 0]
-    for i in range(WIN_LENGTH):
-        if board[check_y][check_x] == piece:
-            pieces_found += 1
-        else:
-            empty[0] = check_y
-            empty[1] = check_x
-        check_y += change_y
-        check_x += change_x
-    if pieces_found == (WIN_LENGTH - 1):
-        return (empty[0], empty[1])
-
-    return (-1, -1)
-
 
 
 ##############################################################################
