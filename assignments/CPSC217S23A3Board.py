@@ -233,9 +233,6 @@ def win_in_diagonal_forward_slash(board, piece):
     for start_x in range(col_count - WIN_LENGTH + 1):
         for start_y in range(ro_count - 1, WIN_LENGTH - 2, -1):
 
-            # print(start_x, start_y)
-            # continue
-
             # start_x and start_y here will be for the leftmost lowest box of diagonal
             in_a_row = 0
             box_x = start_x
@@ -289,7 +286,94 @@ def won(board, piece) -> bool:
 #  TODO: Replace this with your implementation of hint here (code and comments (in-line and function))
 #
 def hint(board, piece):
-    return -1, -1
+    """
+    returns row and column of of move to win given a board where the given piece
+    is one move away from winning
+
+    :param board: list, 2d list representing board
+    :param piece: int, should be constant representing player's piece
+    :return: tuple, row and column of the move, used to index the board
+    """
+    ro_count = row_count(board)
+    col_count = column_count(board)
+
+    # check horizontally
+    for start_y in range(ro_count):
+        for start_x in range(col_count - WIN_LENGTH + 1):
+            empty = [0, 0] # y,x coords for empty square 
+            pieces_found = 0
+            check_x = start_x
+            for i in range(WIN_LENGTH):
+                if board[start_y][check_x] == piece:
+                    pieces_found += 1
+                else:
+                    empty[0] = start_y
+                    empty[1] = check_x
+                check_x += 1
+            # if just one more move needed to win
+            if pieces_found == (WIN_LENGTH - 1):
+                return (empty[0], empty[1])
+    
+    # check vertically
+    for start_x in range(col_count):
+        for start_y in range(ro_count - WIN_LENGTH + 1):
+            empty = [0, 0]
+            pieces_found = 0
+            check_y = start_y
+            for i in range(WIN_LENGTH):
+                if board[check_y][start_x] == piece:
+                    pieces_found += 1
+                else:
+                    empty[0] = check_y
+                    empty[1] = start_x
+                check_y += 1
+            if pieces_found == (WIN_LENGTH - 1):
+                return (empty[0], empty[1])
+    
+    # note: 
+    # below both types of diagonals can be checked at the same time
+    # because each diagonal has an opposite diagonal
+    # think of checking as convoluting WIN_LENGTH * WIN_LENGTH grid over board
+    # in that grid is two WIN_LENGTH diagonals
+
+    # check all diagonals
+    for start_x in range(col_count - WIN_LENGTH + 1): 
+        for start_y in range(ro_count - WIN_LENGTH + 1):
+
+            # backwards slash
+            check_x = start_x
+            check_y = start_y
+            pieces_found = 0
+            empty = [0, 0]
+            for i in range(WIN_LENGTH):
+                if board[check_y][check_x] == piece:
+                    pieces_found += 1
+                else:
+                    empty[0] = check_y
+                    empty[1] = check_x
+                check_y += 1
+                check_x += 1
+            if pieces_found == (WIN_LENGTH - 1):
+                return (empty[0], empty[1])
+            
+            # forward slash
+            check_x = start_x
+            check_y = start_y + WIN_LENGTH - 1
+            pieces_found = 0
+            for i in range(WIN_LENGTH):
+                if board[check_y][check_x] == piece:
+                    pieces_found += 1
+                else:
+                    empty[0] = check_y
+                    empty[1] = check_x
+                check_x += 1
+                check_y -= 1
+            if pieces_found == (WIN_LENGTH - 1):
+                return (empty[0], empty[1]) 
+            
+            
+
+
 
 
 ##############################################################################
