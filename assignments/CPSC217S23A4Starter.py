@@ -31,6 +31,7 @@ def main():
     try:
         infileHandler = open(infile)
     except Exception as e:
+        print("error reading file")
         print(e)
         infileHandler.close()
         exit(1)
@@ -75,9 +76,11 @@ def main():
     # Part 7
     # print sorted by heights
     dict_p7 = part7(contact_records)
+    p7_names = list(dict_p7.keys())
+    p7_names.sort(key=(lambda x: dict_p7[x]), reverse=True)
     print("Heights:")
-    for name in dict_p7:
-        print(f"{name}: {dict_p7[name]}")
+    for name in p7_names:
+        print(f"  {name}: {dict_p7[name]}")
 
     
     infileHandler.close()
@@ -236,11 +239,10 @@ def part7(my_dict:dict) -> dict:
     """
     p_zombies = part3(my_dict)
 
-    all_names = getPeople(my_dict)
+    all_names = part2(my_dict)
     heights = {}
     for name in all_names:
-        if not (name in heights):
-            populateHeights(my_dict, heights, p_zombies, name)
+        populateHeights(my_dict, heights, p_zombies, name)
 
     return heights
 
