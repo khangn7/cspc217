@@ -7,7 +7,7 @@
 # Student UCID: 30237573
 # 
 
-from sys import argv
+from sys import argv, exit
 import os
 
 def main():
@@ -19,20 +19,21 @@ def main():
     if (len(argv) != 2):
         print("Need 1 command line arguments")
         print("Usage: main.py infile.txt")
-        return 1
+        exit(1)
     
     # Get filename
     infile = argv[1]
     if (not os.path.exists(infile)):
         print(f"{infile} doesn't exist in current directory")
-        return 1
+        exit(1)
          
     # Open file
     try:
         infileHandler = open(infile)
     except Exception as e:
         print(e)
-        return 1
+        infileHandler.close()
+        exit(1)
     
     # Make dict from file
     contact_records = {}
@@ -41,7 +42,6 @@ def main():
         sick = line[0]
         contact_records[sick] = line[1:]
     
-
     # Part 1
     # Print data from dict
     print("Contact Records:")
@@ -73,9 +73,10 @@ def main():
     print()
 
     # Part 7
+    # print sorted by heights
     dict_p7 = part7(contact_records)
     print("Heights:")
-    for name in sorted(list(dict_p7)):
+    for name in dict_p7:
         print(f"{name}: {dict_p7[name]}")
 
     
@@ -238,26 +239,39 @@ def part7(my_dict:dict) -> dict:
     all_names = getPeople(my_dict)
     heights = {}
     for name in all_names:
-        heights[name] = getHeight(my_dict, p_zombies, name)
-    
+        if not (name in heights):
+            populateHeights(my_dict, heights, p_zombies, name)
+
     return heights
 
-def getHeight(my_dict:dict, p_zombies:list, person:str):
+def populateHeights(my_dict:dict, out_dict:dict, p_zombies:list, person:str):
     """
-    returns height as defined in part7() for a person
+    populates dict initialized somewhere else with heights found through finding height of :param person:
     :param my_dict: dict, key sick_person : values (list) people who came in contact with key
-    :p_zombies: potential zombies as returned by part3(my_dict)
+    :param out_dict: empty dict initialized outside this function which will be populate
+    :param p_zombies: potential zombies as returned by part3(my_dict)
+    :param person: name of person to start finding height for
     """
+    if person in out_dict:
+        return out_dict[person]
+    
     if person in p_zombies:
+        if not (person in out_dict):
+            out_dict[person] = 0
         return 0
 
-    heights = []
-    for contacted in my_dict[person]:
-        h = getHeight(my_dict, p_zombies, contacted)
-        heights.append(h)
+    contact_n = len(my_dict[person])
+    heights = [None] * contact_n
+    for i in range(contact_n):
+        name = my_dict[person][i]
+        h = populateHeights(my_dict, out_dict, p_zombies, name)
+        heights[i] = h
 
     highest_height = max(heights)
     
+    if not (person in out_dict):
+        out_dict[person] = 1 + highest_height
+
     return 1 + highest_height
 
 
